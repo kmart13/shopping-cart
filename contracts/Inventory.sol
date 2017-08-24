@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.15;
 
 contract Inventory {
   address public owner;
@@ -20,26 +20,16 @@ contract Inventory {
   event Update(string message, string name, uint price, uint quantity, uint sku);
   event StatusChange(string message, string name, uint sku);
 
-  modifier onlyOwner() {
-    assert(msg.sender == owner); _;
-  }
-
-  modifier itemInInventory(string _name) {
-    require(doesItemNameExist(_name)); _;
-  }
-
-  modifier itemNotInInventory(string _name) {
-    require(!doesItemNameExist(_name)); _;
-  }
+  modifier onlyOwner() { assert(msg.sender == owner); _; }
+  modifier itemInInventory(string _name) { require(doesItemExist(_name)); _; }
+  modifier itemNotInInventory(string _name) { require(!doesItemExist(_name)); _; }
 
   function Inventory() {
     owner = msg.sender;
     currentSku = 1;
   }
 
-  function() {
-    revert();
-  }
+  function() { revert(); }
 
   function addItem(string _name, uint _price, uint _quantity)
     public
@@ -87,6 +77,7 @@ contract Inventory {
     itemSku = getSku(_name);
 
     delete items[itemSku];
+    delete lookup[_name];
 
     StatusChange("Deleted Item", _name, itemSku);
   }
@@ -108,11 +99,7 @@ contract Inventory {
     return items[itemSku].active;
   }
 
-  function getSku(string _name) internal itemInInventory(_name) constant returns (uint) {
-    return lookup[_name];
-  }
-
-  function doesItemNameExist(string _name) private constant returns (bool) {
+  function doesItemExist(string _name) public constant returns (bool) {
     if (lookup[_name] != 0) {
       return true;
     } else {
@@ -120,7 +107,9 @@ contract Inventory {
     }
   }
 
-  function remove() onlyOwner {
-    suicide(owner);
+  function getSku(string _name) internal itemInInventory(_name) constant returns (uint) {
+    return lookup[_name];
   }
+
+  function remove() onlyOwner { suicide(owner); }
 }
