@@ -1,8 +1,8 @@
 pragma solidity ^0.4.15;
 
-contract Inventory {
-  address public owner;
+import "./Base.sol";
 
+contract Inventory is Base {
   struct Item {
     string name;
     uint price;
@@ -20,16 +20,12 @@ contract Inventory {
   event Update(string message, string name, uint price, uint quantity, uint sku);
   event StatusChange(string message, string name, uint sku);
 
-  modifier onlyOwner() { assert(msg.sender == owner); _; }
   modifier itemInInventory(string _name) { require(doesItemExist(_name)); _; }
   modifier itemNotInInventory(string _name) { require(!doesItemExist(_name)); _; }
 
   function Inventory() {
-    owner = msg.sender;
     currentSku = 1;
   }
-
-  function() { revert(); }
 
   function addItem(string _name, uint _price, uint _quantity)
     public
@@ -110,6 +106,4 @@ contract Inventory {
   function getSku(string _name) internal itemInInventory(_name) constant returns (uint) {
     return lookup[_name];
   }
-
-  function remove() onlyOwner { suicide(owner); }
 }
