@@ -8,14 +8,13 @@ contract Inventory {
     uint price;
     uint quantity;
     bool active;
-    bool created;
   }
 
-  uint itemSku;
-  uint currentSku;
+  uint private itemSku;
+  uint private currentSku;
 
-  mapping (string => uint) lookup;
-  mapping (uint => Item) items;
+  mapping (uint => Item) public items;
+  mapping (string => uint) internal lookup;
 
   event Add(string message, string name, uint price, uint quantity, uint sku);
   event Update(string message, string name, uint price, uint quantity, uint sku);
@@ -46,34 +45,29 @@ contract Inventory {
     public
     onlyOwner
     itemNotInInventory(_name)
-    returns (uint)
   {
     itemSku = currentSku++;
-    items[itemSku] = Item(_name, _price, _quantity, true, true);
+
     lookup[_name] = itemSku;
+    items[itemSku] = Item(_name, _price, _quantity, true);
 
     Add("Added Item", _name, _price, _quantity, itemSku);
-
-    return itemSku;
   }
 
   function updateItem(string _name, uint _price, uint _quantity)
     public
     onlyOwner
     itemInInventory(_name)
-    constant returns (bool)
   {
     itemSku = getSku(_name);
 
     items[itemSku].price = _price;
     items[itemSku].quantity = _quantity;
 
-    Add("Updated Item", _name, _price, _quantity, itemSku);
-
-    return true;
+    Update("Updated Item", _name, _price, _quantity, itemSku);
   }
 
-  function deactivateItemByName(string _name) public onlyOwner itemInInventory(_name) {
+  function deactivateItem(string _name) public onlyOwner itemInInventory(_name) {
     itemSku = getSku(_name);
 
     items[itemSku].active = false;
@@ -81,7 +75,7 @@ contract Inventory {
     StatusChange("Deactivated Item", _name, itemSku);
   }
 
-  function activateItemByName(string _name) public onlyOwner itemInInventory(_name) {
+  function activateItem(string _name) public onlyOwner itemInInventory(_name) {
     itemSku = getSku(_name);
 
     items[itemSku].active = true;
@@ -89,12 +83,23 @@ contract Inventory {
     StatusChange("Activated Item", _name, itemSku);
   }
 
-  function deleteItemByName(string _name) public onlyOwner itemInInventory(_name) {
+  function deleteItem(string _name) public onlyOwner itemInInventory(_name) {
     itemSku = getSku(_name);
 
     delete items[itemSku];
 
     StatusChange("Deleted Item", _name, itemSku);
+  }
+
+  function getItemInfo(string _name)
+    public
+    itemInInventory(_name)
+    constant returns (uint price, uint quantity)
+  {
+    itemSku = getSku(_name);
+
+    price = items[itemSku].price;
+    quantity = items[itemSku].quantity;
   }
 
   function isActive(string _name) public itemInInventory(_name) constant returns (bool) {
@@ -103,12 +108,11 @@ contract Inventory {
     return items[itemSku].active;
   }
 
-
   function getSku(string _name) internal itemInInventory(_name) constant returns (uint) {
     return lookup[_name];
   }
 
-  function doesItemNameExist(string _name) internal constant returns (bool) {
+  function doesItemNameExist(string _name) private constant returns (bool) {
     if (lookup[_name] != 0) {
       return true;
     } else {

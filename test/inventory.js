@@ -19,9 +19,7 @@ contract('Inventory', function(accounts) {
         if (!error && log)
           console.log(result.args);
       });
-
-      done();
-    });
+    }).then(done).catch(done);
   });
 
   afterEach(function() {
@@ -35,8 +33,27 @@ contract('Inventory', function(accounts) {
   });
 
   it("should add an item to the inventory", function() {
-    return inv.addItem('Item1', 3, 5, {from: accounts[0]}).then(function(sku) {
-      assert(true);
+    return inv.addItem('Item1', 3, 5, {from: accounts[0]}).then(function() {
+      assert.equal(events.get()[0].args.name.valueOf(), 'Item1', "The name should be Item1");
+      assert.equal(events.get()[0].args.price.valueOf(), 3, "The price should be 3");
+      assert.equal(events.get()[0].args.quantity.valueOf(), 5, "The quantity should be 5");
+      return inv.getItemInfo('Item1');
+    }).then(function(data) {
+      assert.equal(data[0], 3, "The price should be 3");
+      assert.equal(data[1], 5, "The quantity should be 5");
+    }).catch((err) => { throw new Error(err) });
+  });
+
+  it("should update an item in the inventory", function() {
+    log = true;
+    return inv.addItem('Item1', 3, 5, {from: accounts[0]}).then(function() {
+      return inv.updateItem('Item1', 5, 10, {from: accounts[0]});
+    }).then(function() {
+      //Event logging doesn't appear to be completely functional...
+      return inv.getItemInfo('Item1');
+    }).then(function(data) {
+      assert.equal(data[0], 5, "The price should be 5");
+      assert.equal(data[1], 10, "The quantity should be 10");
     }).catch((err) => { throw new Error(err) });
   });
 
@@ -45,12 +62,12 @@ contract('Inventory', function(accounts) {
       return inv.isActive('Item1');
     }).then(function(active) {
       assert.equal(active, true, "The item should be active after adding");
-      return inv.deactivateItemByName('Item1');
+      return inv.deactivateItem('Item1');
     }).then(function() {
       return inv.isActive('Item1');
     }).then(function(active) {
       assert.equal(active, false, "The item should be deactivated");
-      return inv.activateItemByName('Item1');
+      return inv.activateItem('Item1');
     }).then(function() {
       return inv.isActive('Item1');
     }).then(function(active) {
