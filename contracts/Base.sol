@@ -3,9 +3,9 @@ pragma solidity ^0.4.15;
 contract Base {
   address public owner;
 
-  modifier onlyOwner() { assert(msg.sender == owner); _; }
+  modifier onlyOwner() { assert(tx.origin == owner); _; }
 
-  function Base() { owner = msg.sender; }
+  function Base() { owner = tx.origin; }
 
   function() { revert(); }
 
