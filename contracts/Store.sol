@@ -2,7 +2,7 @@ pragma solidity ^0.4.15;
 
 import "./Base.sol";
 import "./Inventory.sol";
-import "./ShoppingCart.sol";
+import "./Cart.sol";
 
 contract Store is Base {
   address constant DEFAULT_ADDRESS = 0x0000000000000000000000000000000000000000;
@@ -12,29 +12,29 @@ contract Store is Base {
 
   event Created(string message, address contractAddress);
 
-  function createShoppingCart() public {
+  function createCart() public {
     require(carts[msg.sender] == DEFAULT_ADDRESS);
 
-    ShoppingCart cart = new ShoppingCart();
+    Cart cart = new Cart();
 
     address addr = address(cart);
     carts[msg.sender] = addr;
 
-    Created("Shopping Cart", addr);
+    Created("Cart", addr);
   }
 
   function createInventory() public {
     require(invens[msg.sender] == DEFAULT_ADDRESS);
 
-    Inventory inven = new Inventory();
+    Inventory inv = new Inventory();
 
-    address addr = address(inven);
+    address addr = address(inv);
     invens[msg.sender] = addr;
 
     Created("Inventory", addr);
   }
 
-  function getShoppingCart() public constant returns (address) {
+  function getCart() public constant returns (address) {
     return carts[msg.sender];
   }
 

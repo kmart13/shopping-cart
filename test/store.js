@@ -1,7 +1,7 @@
 var Base = artifacts.require("./Base.sol");
 var Store = artifacts.require("./Store.sol");
 var Inventory = artifacts.require("./Inventory.sol");
-var ShoppingCart = artifacts.require("./ShoppingCart.sol");
+var Cart = artifacts.require("./Cart.sol");
 
 const web3 = global.web3;
 
@@ -31,7 +31,7 @@ contract('Store', function(accounts) {
   });
 
   it("should create a new shopping cart", async function() {
-    await store.createShoppingCart({from: accounts[1]});
+    await store.createCart({from: accounts[1]});
     assert(true);
   });
 
