@@ -1,10 +1,10 @@
-var Base = artifacts.require("./Base.sol");
-var Inventory = artifacts.require("./Inventory.sol");
+var Owner = artifacts.require("./Owner.sol");
 var Cart = artifacts.require("./Cart.sol");
+var Inventory = artifacts.require("./Inventory.sol");
 
 const web3 = global.web3;
 
-contract('Store', function(accounts) {
+contract('Cart', function(accounts) {
   var cart;
   var inv;
   var invEvents;
@@ -13,12 +13,12 @@ contract('Store', function(accounts) {
   var cartLog;
 
   before(async function() {
-    inv = await Inventory.new({from: accounts[0]});
+    inv = await Inventory.new(accounts[0], {from: accounts[0]});
     await inv.addItem('Item1', 3, 5, {from: accounts[0]});
     await inv.addItem('Item2', 3, 5, {from: accounts[0]});
     await inv.addItem('Item3', 3, 5, {from: accounts[0]});
 
-    cart = await Cart.new({from: accounts[1]});
+    cart = await Cart.new(accounts[1], {from: accounts[1]});
     await cart.setInventory(inv.address, {from: accounts[1]});
   });
 

@@ -1,8 +1,8 @@
 pragma solidity ^0.4.15;
 
-import "./Base.sol";
+import "./Owner.sol";
 
-contract Inventory is Base {
+contract Inventory is Owner {
   struct Item {
     string name;
     uint price;
@@ -16,14 +16,14 @@ contract Inventory is Base {
   mapping (uint => Item) public items;
   mapping (string => uint) internal lookup;
 
-  event Add(string message, string name, uint price, uint quantity, uint sku);
-  event Update(string message, string name, uint price, uint quantity, uint sku);
-  event StatusChange(string message, string name, uint sku);
+  event LogAdd(string message, string name, uint price, uint quantity, uint sku);
+  event LogUpdate(string message, string name, uint price, uint quantity, uint sku);
+  event LogStatusChange(string message, string name, uint sku);
 
   modifier itemInInventory(string _name) { require(doesItemExist(_name)); _; }
   modifier itemNotInInventory(string _name) { require(!doesItemExist(_name)); _; }
 
-  function Inventory() {
+  function Inventory(address _owner) Owner(_owner) {
     currentSku = 1;
   }
 
@@ -37,7 +37,7 @@ contract Inventory is Base {
     lookup[_name] = itemSku;
     items[itemSku] = Item(_name, _price, _quantity, true);
 
-    Add("Added Item", _name, _price, _quantity, itemSku);
+    LogAdd("Added Item", _name, _price, _quantity, itemSku);
   }
 
   function updateItem(string _name, uint _price, uint _quantity)
@@ -50,7 +50,7 @@ contract Inventory is Base {
     items[itemSku].price = _price;
     items[itemSku].quantity = _quantity;
 
-    Update("Updated Item", _name, _price, _quantity, itemSku);
+    LogUpdate("Updated Item", _name, _price, _quantity, itemSku);
   }
 
   function deactivateItem(string _name) public onlyOwner itemInInventory(_name) {
@@ -58,7 +58,7 @@ contract Inventory is Base {
 
     items[itemSku].active = false;
 
-    StatusChange("Deactivated Item", _name, itemSku);
+    LogStatusChange("Deactivated Item", _name, itemSku);
   }
 
   function activateItem(string _name) public onlyOwner itemInInventory(_name) {
@@ -66,7 +66,7 @@ contract Inventory is Base {
 
     items[itemSku].active = true;
 
-    StatusChange("Activated Item", _name, itemSku);
+    LogStatusChange("Activated Item", _name, itemSku);
   }
 
   function deleteItem(string _name) public onlyOwner itemInInventory(_name) {
@@ -75,7 +75,7 @@ contract Inventory is Base {
     delete items[itemSku];
     delete lookup[_name];
 
-    StatusChange("Deleted Item", _name, itemSku);
+    LogStatusChange("Deleted Item", _name, itemSku);
   }
 
   function getItemInfo(string _name)

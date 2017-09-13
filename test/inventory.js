@@ -10,7 +10,7 @@ contract('Inventory', function(accounts) {
   beforeEach(async function() {
     log = false;
 
-    inv = await Inventory.new({from: accounts[0]});
+    inv = await Inventory.new(accounts[0], {from: accounts[0]});
 
     events = inv.allEvents(function(error, result) {
       if (!error && log)

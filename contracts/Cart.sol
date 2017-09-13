@@ -1,9 +1,9 @@
 pragma solidity ^0.4.15;
 
-import "./Base.sol";
+import "./Owner.sol";
 import "./Inventory.sol";
 
-contract Cart is Base {
+contract Cart is Owner {
   Inventory private inv;
 
   struct Item {
@@ -16,10 +16,12 @@ contract Cart is Base {
 
   mapping (uint => Item) public cart;
 
-  event Add(string name, uint quantity);
-  event Remove(string name, uint quantity);
+  event LogAdd(string name, uint quantity);
+  event LogRemove(string name, uint quantity);
 
   modifier validQuantity(uint _quantity) { require(_quantity > 0); _; }
+
+  function Cart(address _owner) Owner(_owner) {}
 
   function setInventory(address inventory) public onlyOwner {
     inv = Inventory(inventory);
@@ -32,7 +34,7 @@ contract Cart is Base {
 
     cart[id++] = Item(_name, _price, _quantity);
 
-    Add(_name, _quantity);
+    LogAdd(_name, _quantity);
   }
 
   function removeItem(string _name, uint _quantity) public onlyOwner validQuantity(_quantity) {
@@ -41,7 +43,7 @@ contract Cart is Base {
         require(_quantity <= cart[i].quantity);
         cart[i].quantity -= _quantity;
 
-        Remove(_name, _quantity);
+        LogRemove(_name, _quantity);
 
         break;
       }
