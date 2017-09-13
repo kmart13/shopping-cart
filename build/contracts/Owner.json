@@ -1,0 +1,51 @@
+{
+  "contract_name": "Owner",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "remove",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "_owner",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "constructor"
+    },
+    {
+      "payable": false,
+      "type": "fallback"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b60405160208061018b833981016040528080519150505b60008054600160a060020a031916600160a060020a0383161790555b505b610138806100536000396000f300606060405236156100495763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416638da5cb5b811461005c578063a7f4377914610098575b341561005457600080fd5b5b600080fd5b005b341561006757600080fd5b61006f6100ad565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f35b34156100a357600080fd5b61005a6100c9565b005b60005473ffffffffffffffffffffffffffffffffffffffff1681565b6000543373ffffffffffffffffffffffffffffffffffffffff9081169116146100ee57fe5b60005473ffffffffffffffffffffffffffffffffffffffff16ff5b5b5600a165627a7a7230582029ec5aeec76e2778b14fa4091ec621da1a6ba966ace9cf32a515f7b504e9134a0029",
+  "networks": {
+    "1505324548677": {
+      "events": {},
+      "links": {},
+      "address": "0x4238984fe3b16c0a9526f55bbdf9f47468697111",
+      "updated_at": 1505339583950
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1505339583950
+}
