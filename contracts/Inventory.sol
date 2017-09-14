@@ -103,6 +103,16 @@ contract Inventory is Owner {
     }
   }
 
+  function getBalance() public constant returns (uint) {
+    return this.balance;
+  }
+
+  function buyItem(string _name, uint _quantity) {
+    itemSku = getSku(_name);
+
+    items[itemSku].quantity -= _quantity;
+  }
+
   function getSku(string _name) internal itemInInventory(_name) constant returns (uint) {
     return lookup[_name];
   }

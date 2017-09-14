@@ -7,7 +7,7 @@ contract Owner {
 
   function Owner(address _owner) { owner = _owner; }
 
-  function() { revert(); }
+  function() payable { }
 
   function remove() onlyOwner { suicide(owner); }
 }
