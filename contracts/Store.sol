@@ -1,4 +1,4 @@
-pragma solidity ^0.4.15;
+pragma solidity ^0.4.17;
 
 import "./Owner.sol";
 import "./Inventory.sol";
@@ -11,9 +11,12 @@ contract Store is Owner {
   mapping (address => address) carts;
 
   event LogCreated(string message, address contractAddress);
+  event LogDeleted(string message, address contractAddress);
 
-  function Store() Owner(msg.sender) {}
+  // The `owner` of the store contract is `msg.sender`
+  function Store() public Owner(msg.sender) {}
 
+  /// User can create a new shopping cart assuming they do not already have a shopping cart in use
   function createCart() public {
     require(carts[msg.sender] == DEFAULT_ADDRESS);
 
@@ -25,6 +28,7 @@ contract Store is Owner {
     LogCreated("Cart", addr);
   }
 
+  /// User can create a new inventory assuming they do not already have an inventory in use
   function createInventory() public {
     require(invens[msg.sender] == DEFAULT_ADDRESS);
 
@@ -36,11 +40,13 @@ contract Store is Owner {
     LogCreated("Inventory", addr);
   }
 
-  function getCart() public constant returns (address) {
+  // Returns the address of the `msg.sender` shopping cart contract
+  function getCart() public view returns (address) {
     return carts[msg.sender];
   }
 
-  function getInventory() public constant returns (address) {
+  // Returns the address of the `msg.sender` inventory contract
+  function getInventory() public view returns (address) {
     return invens[msg.sender];
   }
 }

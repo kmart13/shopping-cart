@@ -12,6 +12,7 @@
         }
       ],
       "payable": false,
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -20,6 +21,7 @@
       "name": "remove",
       "outputs": [],
       "payable": false,
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -30,22 +32,36 @@
         }
       ],
       "payable": false,
+      "stateMutability": "nonpayable",
       "type": "constructor"
     },
     {
       "payable": true,
+      "stateMutability": "payable",
       "type": "fallback"
     }
   ],
-  "unlinked_binary": "0x6060604052341561000f57600080fd5b604051602080610172833981016040528080519150505b60008054600160a060020a031916600160a060020a0383161790555b505b61011f806100536000396000f3006060604052361560465763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416638da5cb5b8114604a578063a7f43779146083575b5b5b005b3415605457600080fd5b605a6095565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f35b3415608d57600080fd5b604660b1565b005b60005473ffffffffffffffffffffffffffffffffffffffff1681565b6000543373ffffffffffffffffffffffffffffffffffffffff90811691161460d557fe5b60005473ffffffffffffffffffffffffffffffffffffffff16ff5b5b5600a165627a7a723058209278cd7830672d23960f3ef6d36ea298023ca41b64db7a83edc2ada904bd06220029",
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b60405160208061016c8339810160405280805160008054600160a060020a03909216600160a060020a03199092169190911790555050610118806100546000396000f3006060604052361560465763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416638da5cb5b81146048578063a7f43779146081575b005b3415605257600080fd5b60586091565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f35b3415608b57600080fd5b604660ad565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b6000543373ffffffffffffffffffffffffffffffffffffffff90811691161460d157fe5b60005473ffffffffffffffffffffffffffffffffffffffff16ff00a165627a7a7230582052413228a105061b3439e0e4fbc28e777054e9ecc464f1e0ac752e669d7a1e910029",
   "networks": {
     "1505324548677": {
       "events": {},
       "links": {},
       "address": "0x4238984fe3b16c0a9526f55bbdf9f47468697111",
       "updated_at": 1505339583950
+    },
+    "1505840386057": {
+      "events": {},
+      "links": {},
+      "address": "0x496cab4f26655ae895db80fd7014e79c20bdbcdc",
+      "updated_at": 1505840403906
+    },
+    "1506961426718": {
+      "events": {},
+      "links": {},
+      "address": "0xeb2701b9834d4ab2e2bbced77cad67400cd3e234",
+      "updated_at": 1506962154219
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1505428230116
+  "updated_at": 1506984379377
 }
