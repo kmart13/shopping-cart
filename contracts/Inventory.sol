@@ -19,6 +19,7 @@ contract Inventory is Owner {
   event LogUpdate(string name, uint price, uint quantity, uint sku);
   event LogStatusChange(string message, string name, uint sku);
   event LogWithdrawal(uint amount);
+  event LogPurchased(string name, uint quantity);
 
   modifier itemInInventory(string _name) { require(doesItemExist(_name)); _; }
   modifier itemNotInInventory(string _name) { require(!doesItemExist(_name)); _; }
@@ -92,6 +93,7 @@ contract Inventory is Owner {
     LogWithdrawal(_amount);
   }
 
+  /// Returns price and quantity of item `_name`
   function getItemInfo(string _name)
     public
     itemInInventory(_name)
@@ -103,12 +105,14 @@ contract Inventory is Owner {
     quantity = items[itemSku].quantity;
   }
 
+  /// Returns active flag of item `_name` if it is in the inventory
   function isActive(string _name) public itemInInventory(_name) view returns (bool) {
     uint itemSku = getSku(_name);
 
     return items[itemSku].active;
   }
 
+  /// Returns true is item `_name` exists in inventory, false if not.
   function doesItemExist(string _name) public view returns (bool) {
     if (lookup[_name] != 0) {
       return true;
@@ -117,16 +121,21 @@ contract Inventory is Owner {
     }
   }
 
-  function getBalance() public view returns (uint) {
+  /// Returns contract balance
+  function getBalance() public onlyOwner view returns (uint) {
     return this.balance;
   }
 
-  function buyItem(string _name, uint _quantity) external {
+  /// Deducts `_quantity` of item `_name` from inventory
+  function purchaseItem(string _name, uint _quantity) external {
     uint itemSku = getSku(_name);
 
     items[itemSku].quantity -= _quantity;
+
+    LogPurchased(_name, _quantity);
   }
 
+  /// Returns the sku of item `_name`
   function getSku(string _name) internal itemInInventory(_name) view returns (uint) {
     return lookup[_name];
   }

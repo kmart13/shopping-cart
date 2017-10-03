@@ -75,9 +75,9 @@ contract('Inventory', function(accounts) {
 
   it("should withdraw funds from the inventory contract", async function() {
     web3.eth.sendTransaction({from: accounts[0], to: inv.address, value: 20});
-    assert.equal(await inv.getBalance(), 20, "Contract should have balance of 20 wei");
+    assert.equal(await inv.getBalance({from: accounts[0]}), 20, "Contract should have balance of 20 wei");
     await inv.withdrawFunds(10, {from: accounts[0]});
-    assert.equal(await inv.getBalance(), 10, "Contract should have balance of 10 wei");
+    assert.equal(await inv.getBalance({from: accounts[0]}), 10, "Contract should have balance of 10 wei");
     assert.equal(events.get()[0].args.amount.valueOf(), 10, "Should withdraw 10 wei");
   });
 });

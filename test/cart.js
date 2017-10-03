@@ -67,9 +67,8 @@ contract('Cart', function(accounts) {
     await cart.changeQuantity('Item2', 2, {from: accounts[1]});
     await cart.addItem('Item3', 3, {from: accounts[1]});
     var total = web3.toWei(await cart.calculateTotal({from: accounts[1]}), "wei");
-    console.log(total);
-    await cart.checkout({from: accounts[1], value: total, gas: 150000});
-    console.log(await inv.getBalance());
-    console.log(cartEvents.get());
+    await cart.checkout({from: accounts[1], value: total});
+    var balance = await inv.getBalance()
+    assert.equal(balance, 18, "Inventory should contain a balance of 18 wei after purchase");
   });
 });

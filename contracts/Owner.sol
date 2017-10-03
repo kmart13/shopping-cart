@@ -15,5 +15,6 @@ contract Owner {
   // Default payable fallback function to allow transfers
   function() public payable { }
 
+  // Default suicide function
   function remove() public onlyOwner { selfdestruct(owner); }
 }
